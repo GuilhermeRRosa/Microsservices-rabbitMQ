@@ -1,7 +1,7 @@
 import express from "express";
 
 const env = process.env;
-const PORT = env.PORT || 8081
+const PORT = env.PORT || 8080
 
 console.log("PORT: "+env)
 const app = express();
