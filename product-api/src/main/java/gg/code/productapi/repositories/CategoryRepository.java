@@ -11,4 +11,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     List<Category> findByDescriptionIgnoreCaseContaining(String description);
 
+    boolean existsById(Integer id);
+
 }

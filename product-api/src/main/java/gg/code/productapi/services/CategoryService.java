@@ -1,5 +1,6 @@
 package gg.code.productapi.services;
 
+import gg.code.productapi.config.SuccessResponse;
 import gg.code.productapi.config.exceptions.ServiceException;
 import gg.code.productapi.config.exceptions.ValidationException;
 import gg.code.productapi.dto.request.CategoryRequest;
@@ -21,10 +22,23 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductService productService;
+
     public CategoryResponse save(CategoryRequest request){
         validateCategoryNameInformed(request);
         var category = categoryRepository.save(Category.of(request));
         return CategoryResponse.of(category);
+    }
+
+    public CategoryResponse update(CategoryRequest request){
+        if (ObjectUtils.isEmpty(request.getId())){
+            throw new ValidationException("Category Id, must be informed!");
+        }
+        if (!categoryRepository.existsById(request.getId())){
+            throw new ServiceException(HttpStatus.NOT_FOUND.value(), "Category not found");
+        }
+        return CategoryResponse.of(categoryRepository.save(Category.of(request)));
     }
 
     public Category findById(Integer id){
@@ -56,6 +70,21 @@ public class CategoryService {
                 .stream()
                 .map(CategoryResponse::of)
                 .collect(Collectors.toList());
+    }
+
+    public SuccessResponse delete(Integer id){
+        if (ObjectUtils.isEmpty(id)){
+            throw new ValidationException("Category id must be informed");
+        }
+        if (productService.existsByCategoryId(id)){
+            throw new ServiceException(
+                    HttpStatus.FORBIDDEN.value(),
+                    "Products with the category id "+id+" exists, Category cannot be deleted"
+            );
+        }
+
+        categoryRepository.delete(findById(id));
+        return SuccessResponse.create("Category id "+id+" deleted with success");
     }
 
     private void validateCategoryNameInformed(CategoryRequest request) {
