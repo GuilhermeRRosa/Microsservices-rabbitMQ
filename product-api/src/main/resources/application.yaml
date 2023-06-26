@@ -1,6 +1,7 @@
 server:
     port: ${PORT:8082}
 spring:
+
     application:
         name: product-api
     datasource:
@@ -26,3 +27,26 @@ spring:
 
     main:
         allow-circular-references: true
+        allow-bean-definition-overriding: true
+
+    rabbitmq:
+        host: ${RABBIT_MQ_HOST:localhost}
+        port: ${RABBIT_MQ_PORT:5672}
+        username: ${RABBIT_MQ_USER:guest}
+        password: ${RABBIT_MQ_PASSWORD:guest}
+
+app-config:
+    secrets:
+        api-secret: ${API_SECRET:bXktYXBpLWF1dGgtbm9kZS1zZWNyZXQtMTYwNjIwMjM=}
+
+    rabbit:
+        exchange:
+            product: product.topic
+
+        routingKey:
+            product-stock: product-stock-update.routingKey
+            sales-confirmation: sales-confirmation.routingKey
+
+        queue:
+            product-stock: product-stock-update.queue
+            sales-confirmation: sales-confirmation.queue

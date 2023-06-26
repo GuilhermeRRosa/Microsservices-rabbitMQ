@@ -3,6 +3,7 @@ package gg.code.productapi.services;
 import gg.code.productapi.config.SuccessResponse;
 import gg.code.productapi.config.exceptions.ServiceException;
 import gg.code.productapi.config.exceptions.ValidationException;
+import gg.code.productapi.dto.rabbit.ProductStockDTO;
 import gg.code.productapi.dto.request.ProductRequest;
 import gg.code.productapi.dto.response.CategoryResponse;
 import gg.code.productapi.dto.response.ProductResponse;
@@ -103,6 +104,10 @@ public class ProductService {
         }
         productRepository.deleteById(id);
         return SuccessResponse.create("product deleted successfully");
+    }
+
+    public void updateProductStock(ProductStockDTO product){
+
     }
 
     private void verifyIfProductExists(ProductRequest request){
