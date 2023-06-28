@@ -1,0 +1,31 @@
+package gg.code.productapi.config.interceptor;
+
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
+import gg.code.productapi.config.exceptions.ValidationException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+
+/*
+    Classe que reproduz nas chamadas FeignClient o Header Authorization enviado na requisição
+ */
+public class FeignClientAuthInterceptor implements RequestInterceptor {
+
+    private static final String AUTHORIZATION = "Authorization";
+    @Override
+    public void apply(RequestTemplate template) {
+        var currentRequest = getCurrentRequest();
+        template.header(AUTHORIZATION, currentRequest.getHeader(AUTHORIZATION));
+    }
+
+    private HttpServletRequest getCurrentRequest(){
+        try {
+            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ValidationException("The current request could not be processed");
+        }
+    }
+}

@@ -1,8 +1,10 @@
 package gg.code.productapi.controllers;
 
 import gg.code.productapi.config.SuccessResponse;
+import gg.code.productapi.dto.request.ProductCheckStockRequest;
 import gg.code.productapi.dto.request.ProductRequest;
 import gg.code.productapi.dto.response.ProductResponse;
+import gg.code.productapi.dto.response.ProductSalesResponse;
 import gg.code.productapi.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +54,16 @@ public class ProductController {
     @DeleteMapping("{id}")
     public SuccessResponse delete(@PathVariable Integer id){
         return productService.delete(id);
+    }
+
+    @PostMapping("check-stock")
+    public SuccessResponse checkProductStock(@RequestBody ProductCheckStockRequest request){
+        return productService.checkProductsStock(request);
+    }
+
+    @GetMapping("{id}/sales")
+    public ProductSalesResponse findProductSales(@PathVariable Integer id){
+        return productService.findProductSales(id);
     }
 
 }

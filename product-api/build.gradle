@@ -17,6 +17,16 @@ configurations {
 	}
 }
 
+ext {
+	set('springCloudVersion', "2022.0.1")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -37,6 +47,9 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	// https://mvnrepository.com/artifact/org.springframework.amqp/spring-rabbit
 	implementation 'org.springframework.amqp:spring-rabbit'
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
 
 }
 
